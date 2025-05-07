@@ -1,7 +1,7 @@
 {
-  "name": "grab",
+  "name": "grab-api",
   "version": "1.0.0",
-  "description": "The next step after Reach.",
+  "description": "The API the Grab application connects into.",
   "main": "index.js",
   "scripts": {
     "start": "node server.js",
