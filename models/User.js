@@ -1,7 +1,7 @@
 const { promisePool } = require('../modules/database');
 
 const getUserByEmail = async (email) => {
-	const query = "SELECT id, first_name, last_name FROM users WHERE email = ?";
+	const query = "SELECT id, email, first_name, last_name FROM users WHERE email = ?";
 
 	try {
 		const [rows] = await promisePool.query(query, [email]);

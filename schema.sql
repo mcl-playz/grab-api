@@ -7,19 +7,11 @@ CREATE TABLE users (
     password VARCHAR(255)
 );
 
--- Roles table
-CREATE TABLE roles (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    name VARCHAR(50) UNIQUE
-);
-
--- Permissions table
+-- Permissions
 CREATE TABLE permissions (
     id INT PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(50) UNIQUE
 );
-
--- Role-Permission link
 CREATE TABLE role_permissions (
     role_id INT NOT NULL,
     permission_id INT NOT NULL,
@@ -28,7 +20,11 @@ CREATE TABLE role_permissions (
     FOREIGN KEY (permission_id) REFERENCES permissions(id)
 );
 
--- User-Role link
+-- Roles
+CREATE TABLE roles (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(50) UNIQUE
+);
 CREATE TABLE user_roles (
     user_id INT NOT NULL,
     role_id INT NOT NULL,

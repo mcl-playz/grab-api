@@ -1,9 +1,10 @@
+require('dotenv').config();
 const jwtUtil = require("../utils/jwt")
 
 const api = (req, res, next) => {
     const authHeader = req.headers.authorization;
 
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    if(!authHeader || !authHeader.startsWith('Bearer ')){
         return res.status(401).json({ error: 'No token provided' });
     }
 
@@ -13,7 +14,7 @@ const api = (req, res, next) => {
         const decoded = jwtUtil.verifyToken(token)
         req.user = decoded;
         next();
-    } catch (err) {
+    } catch (err){
         return res.status(403).json({ error: 'Invalid or expired token' });
     }
 };
