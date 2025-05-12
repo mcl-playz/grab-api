@@ -8,15 +8,15 @@ const login = async (req, res) => {
     try {
         const user = await User.getUserByEmail(email);
         if (!user || !(await Auth.validatePassword(password, user.id))) {
-            return res.status(401).json({ error: 'Invalid credentials' });
+            return res.status(401).json({ success: false, message: 'Invalid credentials' });
         }
 
         const token = await jwtUtil.generateToken(user);
-        res.json({ token });
+        res.json({ success: true, user, token });
 
     } catch (err) {
         console.error('API login failed:', err);
-        res.status(500).json({ error: 'Internal server error' });
+        res.status(500).json({ success: false, message: 'Internal server error' });
     }
 };
 

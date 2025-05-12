@@ -3,7 +3,7 @@ const User = require('../models/User');
 
 const generateToken = async (user) => {
     return jwt.sign(
-        { id: user.id, roles: await User.getRolesByID(user.id) },
+        { id: user.id, roles: await user.roles },
         process.env.JWT_SECRET,
         { expiresIn: '1h' }
     );
