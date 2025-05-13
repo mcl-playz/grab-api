@@ -5,11 +5,15 @@ const getUserByEmail = async (email) => {
 	const rolesQuery = "SELECT r.id AS roles FROM users u JOIN user_roles ur ON u.id = ur.user_id JOIN roles r ON ur.role_id = r.id WHERE u.email = ?"
 
 	try {
-		const [user] = await db.query(userQuery, [email]);
-		const [roles] = await db.query(rolesQuery, [email]);
-		const rolesArray = roles.map(item => item.roles);
-		user[0].roles = rolesArray;
-		return user[0];
+		const [userResult] = await db.query(userQuery, [email]);
+		const user = userResult[0]
+		if (user) {
+    		const [rolesResult] = await db.query(rolesQuery, [email]);
+    		const rolesArray = rolesResult.map(item => item.roles);
+    		user.roles = rolesArray;
+    		return user;
+  		}
+		return null;
 	} catch (err) {
 		throw err;
 	}
