@@ -12,7 +12,7 @@ CREATE TABLE permissions (
     id INT PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(50) UNIQUE
 );
-CREATE TABLE role_permissions (
+CREATE TABLE role_permissions ( -- Link certain permissions to certain roles
     role_id INT NOT NULL,
     permission_id INT NOT NULL,
     PRIMARY KEY (role_id, permission_id),
@@ -25,7 +25,7 @@ CREATE TABLE roles (
     id INT PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(50) UNIQUE
 );
-CREATE TABLE user_roles (
+CREATE TABLE user_roles ( -- Link certain roles to certain users
     user_id INT NOT NULL,
     role_id INT NOT NULL,
     PRIMARY KEY (user_id, role_id),
