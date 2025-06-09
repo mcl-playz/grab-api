@@ -33,6 +33,59 @@ CREATE TABLE user_roles ( -- Link certain roles to certain users
     FOREIGN KEY (role_id) REFERENCES roles(id) ON DELETE CASCADE
 );
 
+-- Transport Types
+CREATE TABLE transport_types (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(50) NOT NULL UNIQUE,
+);
+
+-- Leave Types
+CREATE TABLE leave_types (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(100) NOT NULL UNIQUE,
+);
+
+-- Hosts
+CREATE TABLE hosts (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    phone VARCHAR(10) NOT NULL, -- Sufficient length for "0000 000 000"
+    -- CHECK constraint to enforce the format "0000 000 000"
+    CONSTRAINT chk_phone_format CHECK (phone REGEXP '^[0-9]{4} [0-9]{3} [0-9]{3}$'),
+);
+
+-- Leaves
+CREATE TABLE leaves (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    status ENUM('PENDING', 'APPROVED', 'DENIED') NOT NULL,
+    host_id INT,
+    leave_type_id INT,
+    departure_date DATETIME NOT NULL,
+    return_date DATETIME NOT NULL,
+    departure_transport_id INT,
+    return_transport_id INT,
+    destination VARCHAR(50) NOT NULL,
+    notes VARCHAR(255),
+
+    -- Foreign Key Constraints
+    CONSTRAINT fk_leave_type
+        FOREIGN KEY (leave_type_id) REFERENCES leave_types(id)
+        ON DELETE SET NULL ON UPDATE CASCADE, -- Prevent deletion of leave type if leaves are associated
+
+    CONSTRAINT fk_host
+        FOREIGN KEY (host_id) REFERENCES hosts(id)
+        ON DELETE SET NULL ON UPDATE CASCADE -- Prevent deletion of host if leaves are associated
+
+    CONSTRAINT fk_departure_transport
+        FOREIGN KEY (departure_transport_id) REFERENCES transport_types(id)
+        ON DELETE SET NULL ON UPDATE CASCADE, -- If a transport type is deleted, set to NULL; update if ID changes
+
+    CONSTRAINT fk_return_transport
+        FOREIGN KEY (return_transport_id) REFERENCES transport_types(id)
+        ON DELETE SET NULL ON UPDATE CASCADE,
+)
+
 -- Create indexes for fast queries
 CREATE INDEX idx_user_roles_user_id ON user_roles(user_id);
 CREATE INDEX idx_user_roles_role_id ON user_roles(role_id);
